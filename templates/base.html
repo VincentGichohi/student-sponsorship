@@ -4,10 +4,12 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="style.css">
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/c4f53cc4be.js" crossorigin="anonymous"></script> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
      <style>
        /* Googlefont Poppins CDN Link */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap'); 
 *{
   margin: 0;
   padding: 0;
@@ -461,7 +463,7 @@ nav .profile-details i{
           <li>
             <a href="#">
               <i class='bx bx-box' ></i>
-              <span class="links_name">Product</span>
+              <span class="links_name">Login</span>
             </a>
           </li>
           <li>
@@ -503,7 +505,7 @@ nav .profile-details i{
           <li>
             <a href="#">
               <i class='bx bx-heart' ></i>
-              <span class="links_name">Favrorites</span>
+              <span class="links_name">Favorites</span>
             </a>
           </li>
           <li>
@@ -513,7 +515,7 @@ nav .profile-details i{
             </a>
           </li>
           <li class="log_out">
-            <a href="#">
+            <a href="{% url 'login'%}">
               <i class='bx bx-log-out'></i>
               <span class="links_name">Log out</span>
             </a>
