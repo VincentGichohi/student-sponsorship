@@ -17,6 +17,7 @@ class UserManager(BaseUserManager):
         email=email,
         is_staff=is_staff,
         is_active=True,
+        is_sponsor=True,
         is_superuser=is_superuser, 
         last_login=now,
         date_joined=now, 
@@ -37,6 +38,8 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=254, unique=True)
     name = models.CharField(max_length=254, null=True, blank=True)
+    is_admin=models.BooleanField(default=False)
+    is_sponsor=models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -54,7 +57,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         return "/sponsorship/%i/" % (self.pk)
 
 
-class Person(models.Model):
+class Student(models.Model):
     first_name=models.CharField(max_length=100)
     last_name=models.CharField(max_length=100)
     address=models.CharField(max_length=50)
@@ -66,7 +69,7 @@ class Person(models.Model):
     school_address=models.CharField(max_length=100)
     academic_level=models.TextField()
     expected_year_of_completion=models.DateField(default=None)
-    reasons_for_sponsorship=models.TextField(default=False)
+    reasons_for_sponsorship=models.TextField()
     recommendation_letter=models.FileField(upload_to='images')
 
     

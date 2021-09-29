@@ -1,4 +1,4 @@
-from .models import Person, Sponsor
+from .models import Student, Sponsor
 from django import forms
 from django.forms import  ModelForm
 from django.contrib.auth import get_user_model
@@ -56,19 +56,19 @@ class AuthenticationForm(forms.Form): # Note: forms.Form NOT forms.ModelForm
 class BioForm(ModelForm):
 
     class Meta:
-        model=Person
+        model=Student
         fields=('first_name','last_name','address','phone','email')
 
 
 class SchoolForm(ModelForm):
 
     class Meta:
-        model=Person
+        model=Student
         fields=('school_name','school_address','academic_level','expected_year_of_completion')
 
         
 class RecommendationForm(ModelForm):
 
     class Meta:
-        model=Person
+        model=Student
         fields=('reasons_for_sponsorship','recommendation_letter')

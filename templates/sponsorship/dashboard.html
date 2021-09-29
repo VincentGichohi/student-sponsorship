@@ -2,5 +2,13 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-hello world 
+  Hello, {{ user.username|default:'Guest' }}!<br>
+  {% comment %} <div class="container">
+    {% if user.is_authenticated %}
+        <a href="{% url 'logout' %}" <button type="button" class="btn btn-success"></button>Logout</a>
+        <a href="{% url 'password_change' %}"<button type="button" class="btn btn-success"></button>Change password</a>
+    {% else %}
+        <a href="{% url 'login' %}"<button type="button" class="btn btn-secondary"></button>Login</a>
+    {% endif %}
+  </div> {% endcomment %}
 {% endblock %}
