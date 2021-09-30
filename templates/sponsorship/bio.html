@@ -2,8 +2,18 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
 {% load crispy_forms_tags %}
-
-
+  <center>
+  <strong><h1>Personal Details</h1></strong>
+  <br></br>
+  {% if submitted %}
+    Your Form was submitted Successfully!
+  {% else %}
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit" class="btn-btn-secondary">
+      </form>
+  </center>
+  {% endif %}
 {% endblock %}

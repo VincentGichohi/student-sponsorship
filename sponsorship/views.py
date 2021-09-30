@@ -46,6 +46,11 @@ def login_request(request):
 	form = AuthenticationForm()
 	return render(request,"sponsorship/login.html",{"login_form":form})
 
+# def logout_request(request):
+# 	logout(request)
+# 	messages.info(request, "You have successfully logged out.") 
+# 	return redirect("main:homepage")
+
 
 def bio(request):
 	submitted=False
@@ -94,3 +99,6 @@ def index(request):
 
 def sponsor(request):
 	return render(request, 'sonsorship/sponsor.html')
+
+def student_table(request):
+	return render(request, 'sponsorship/student_table.html')

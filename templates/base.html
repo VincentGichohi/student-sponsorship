@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="style.css">
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://kit.fontawesome.com/c4f53cc4be.js" crossorigin="anonymous"></script> 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
      <style>
        /* Googlefont Poppins CDN Link */
@@ -16,7 +17,7 @@
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
 }
-.row::after{
+/* .row::after{
   display: table;
   clear:both;
   content:"";
@@ -26,21 +27,21 @@
   padding: 15px;
 }
 .col-1 {width:8.33%}
-    .col-2 {width:16.33%}
-    .col-3 {width:20.00%}
-    .col-4 {width:1.45%}
-    .col-5 {width:8.33%}
-    .col-6 {width:8.33%}
-    .col-7 {width:80.33%}
-    .col-8 {width:70.43%}
-    .col-9 {width:75%}
-    .col-10 {width:80.33%}
-    .col-11 {width:90.33%}
-    .col-12 {width:100%}
+.col-2 {width:16.33%}
+.col-3 {width:20.00%}
+.col-4 {width:1.45%}
+.col-5 {width:8.33%}
+.col-6 {width:8.33%}
+.col-7 {width:80.33%}
+.col-8 {width:70.43%}
+.col-9 {width:75%}
+.col-10 {width:80.33%}
+.col-11 {width:90.33%}
+.col-12 {width:100%} */
 .sidebar{
   position: fixed;
   height: 100%;
-  width: 240px;
+  width: 270px;
   background: #0A2558;
   transition: all 0.5s ease;
 }
@@ -444,107 +445,104 @@ nav .profile-details i{
     display: none;
   }
 }
+.container{
+  margin:3px;
+  width: 100%;
+}
+.col-9{
+  padding: 30px;
+  position:fixed;
+  margin-left: 270px;
+  
+}
     </style>
    </head>
 <body>
-  <div class="row">
-    <div class="sidebar">
-      <div class="logo-details">
-        <i class='bx bxl-c-plus-plus'></i>
-        <span class="logo_name">Sponsorship</span>
-      </div>
-        <ul class="nav-links">
-          <li>
-            <a href="#" class="active">
-              <i class='bx bx-grid-alt' ></i>
-              <span class="links_name">Dashboard</span>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <i class='bx bx-box' ></i>
-              <span class="links_name">Login</span>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <i class='bx bx-list-ul' ></i>
-              <span class="links_name">Order list</span>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <i class='bx bx-pie-chart-alt-2' ></i>
-              <span class="links_name">Analytics</span>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <i class='bx bx-coin-stack' ></i>
-              <span class="links_name">Stock</span>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <i class='bx bx-book-alt' ></i>
-              <span class="links_name">Total order</span>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <i class='bx bx-user' ></i>
-              <span class="links_name">Team</span>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <i class='bx bx-message' ></i>
-              <span class="links_name">Messages</span>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <i class='bx bx-heart' ></i>
-              <span class="links_name">Favorites</span>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <i class='bx bx-cog' ></i>
-              <span class="links_name">Setting</span>
-            </a>
-          </li>
-          <li class="log_out">
-            <a href="{% url 'login'%}">
-              <i class='bx bx-log-out'></i>
-              <span class="links_name">Log out</span>
-            </a>
-          </li>
-        </ul>
-    </div>
-   
-    <section class="home-section">
-      <nav>
-        <div class="sidebar-button">
-          <i class='bx bx-menu sidebarBtn'></i>
-          <span class="dashboard">Dashboard</span>
+<div class="container">
+    <div class="row">
+        <div class="col-3">
+            <div class="sidebar">
+                <div class="logo-details">
+                  <i class='bx bxl-c-plus-plus'></i>
+                  <span class="logo_name">Sponsorship</span>
+                </div>
+                  <ul class="nav-links">
+                    <li>
+                      <a href="#" class="active">
+                        <i class='bx bx-grid-alt' ></i>
+                        <span class="links_name">Dashboard</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#">
+                        <i class='bx bx-box' ></i>
+                        <span class="links_name">Upload Documents</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#">
+                        <i class='bx bx-list-ul' ></i>
+                        <span class="links_name">Order list</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#">
+                        <i class='bx bx-pie-chart-alt-2' ></i>
+                        <span class="links_name">Analytics</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#">
+                        <i class='bx bx-coin-stack' ></i>
+                        <span class="links_name">Stock</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#">
+                        <i class='bx bx-book-alt' ></i>
+                        <span class="links_name">Total order</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#">
+                        <i class='bx bx-user' ></i>
+                        <span class="links_name">Profile</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#">
+                        <i class='bx bx-message' ></i>
+                        <span class="links_name">Messages</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#">
+                        <i class='bx bx-heart' ></i>
+                        <span class="links_name">Favorites</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#">
+                        <i class='bx bx-cog' ></i>
+                        <span class="links_name">Setting</span>
+                      </a>
+                    </li>
+                    <li class="log_out">
+                      <a href="{% url 'login'%}">
+                        <i class='bx bx-log-out'></i>
+                        <span class="links_name">Log out</span>
+                      </a>
+                    </li>
+                  </ul>
+              </div>
         </div>
-        <div class="search-box">
-          <input type="text" placeholder="Search...">
-          <i class='bx bx-search' ></i>
-        </div>
-        <div class="profile-details">
-          <!--<img src="images/profile.jpg" alt="">-->
-          <span class="admin_name">Prem Shahi</span>
-          <i class='bx bx-chevron-down' ></i>
-        </div>
-      </nav>
-    </section>
-    <div class="col-md-9">
-      {% block content %}
+         <div class="col-9">
+             {% block content %}
+
+             {% endblock %}
+         </div>
+</div>
   
-     {% endblock %}
-     </div>
     <script>
      let sidebar = document.querySelector(".sidebar");
   let sidebarBtn = document.querySelector(".sidebarBtn");
@@ -556,7 +554,9 @@ nav .profile-details i{
     sidebarBtn.classList.replace("bx-menu-alt-right", "bx-menu");
   }
    </script>
-  
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-W8fXfP3gkOKtndU4JGtKDvXbO53Wy8SZCQHczT5FMiiqmQfUpWbYdTil/SxwZgAN" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
   </div>
 </body>
 </html>

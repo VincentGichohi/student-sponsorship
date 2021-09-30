@@ -34,6 +34,10 @@ class UserManager(BaseUserManager):
     user=self._create_user(email, password, True, True, **extra_fields)
     return user
 
+  def create_sponsor(self, email, password, **extra_fields):
+    user=self._create_user(email, password, True, True, **extra_fields)
+    return user
+
 
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=254, unique=True)
