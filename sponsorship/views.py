@@ -3,10 +3,11 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
+from django.core.mail import send_mail, BadHeaderError
 from django.contrib.auth import login as django_login, logout as django_logout, authenticate as django_authenticate
 from django.contrib.auth.decorators import login_required
-from .forms import AuthenticationForm, RegistrationForm, BioForm, SchoolForm, RecommendationForm
-# from .models import user_type, User
+from .forms import AuthenticationForm, RegistrationForm, BioForm, SchoolForm, RecommendationForm, ContactForm
+
 
 # Create your views here.
 
@@ -51,6 +52,29 @@ def login_request(request):
 # 	messages.info(request, "You have successfully logged out.") 
 # 	return redirect("main:homepage")
 
+def contact(request):
+  if request.method == 'POST':
+    form = ContactForm(request.POST)
+    if form.is_valid():
+      subject = "Website Inquiry" 
+      body = {
+      'first_name': form.cleaned_data['first_name'], 
+      'last_name': form.cleaned_data['last_name'], 
+      'email': form.cleaned_data['email_address'], 
+      'message':form.cleaned_data['message'], 
+      }
+      message = "\n".join(body.values())
+
+      try:
+        send_mail(subject, message, 'admin@example.com', ['admin@example.com']) 
+      except BadHeaderError:
+        return HttpResponse('Invalid header found.')
+      messages.success(request, "Message sent." )
+      return redirect ("dashboard")
+    messages.error(request, "Error. Message not sent.")
+      
+  form = ContactForm()
+  return render(request, "sponsorship/contact.html", {'form':form})
 
 def bio(request):
 	submitted=False
@@ -92,7 +116,7 @@ def recommendation(request):
 			if 'submitted' in request.GET:
 				submitted=True
 		form=RecommendationForm
-		return render(request,'sponsorship/reasons.html',{"form":form,'submitted':submitted})
+		return render(request,'sponsorship/recommendation.html',{"form":form,'submitted':submitted})
 
 def index(request):
     return render(request, 'sponsorship/index.html')

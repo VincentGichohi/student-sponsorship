@@ -1,0 +1,20 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% load crispy_forms_tags %}
+  <center>
+  <h1>Reasons to be Sponsored</h1>
+  <br></br>
+  {% if submitted %}
+    Your Form was submitted Successfully!
+  {% else %}
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit" class="btn-btn-secondary">
+      </form>
+  </center>
+  {% endif %}
+{% endblock %}
