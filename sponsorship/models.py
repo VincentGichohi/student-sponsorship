@@ -82,7 +82,6 @@ class Student(models.Model):
 
 class Sponsor(models.Model):
     sponsorName=models.CharField(max_length=200)
-    sponsorEmail=models.EmailField(default=None, unique=True)
     country=models.CharField(max_length=200)
     sponsoredSchool=models.CharField(max_length=200)
     type_of_sponsorship=models.TextField(default=None)

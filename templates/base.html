@@ -17,27 +17,7 @@
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
 }
-/* .row::after{
-  display: table;
-  clear:both;
-  content:"";
-}
-[class*="col-"] {
-  float: left;
-  padding: 15px;
-}
-.col-1 {width:8.33%}
-.col-2 {width:16.33%}
-.col-3 {width:20.00%}
-.col-4 {width:1.45%}
-.col-5 {width:8.33%}
-.col-6 {width:8.33%}
-.col-7 {width:80.33%}
-.col-8 {width:70.43%}
-.col-9 {width:75%}
-.col-10 {width:80.33%}
-.col-11 {width:90.33%}
-.col-12 {width:100%} */
+
 .sidebar{
   position: fixed;
   height: 100%;
@@ -452,8 +432,14 @@ nav .profile-details i{
 .col-9{
   padding: 30px;
   position:fixed;
-  margin-left: 270px;
-  
+  margin-left: 300px;
+}
+table{
+  border: 2px solid black;
+  width:100%;
+}
+table th{
+  border-collapse: collapse;
 }
     </style>
    </head>
@@ -473,60 +459,113 @@ nav .profile-details i{
                         <span class="links_name">Dashboard</span>
                       </a>
                     </li>
+                    {% if user.is_authenticated and user.is_student %}
                     <li>
                       <a href="#">
-                        <i class='bx bx-box' ></i>
-                        <span class="links_name">Upload Documents</span>
+                        <span class="icon"><i class="fas fa-home"></i></span>
+                        <span class="title">Home</span>
                       </a>
                     </li>
                     <li>
-                      <a href="#">
-                        <i class='bx bx-list-ul' ></i>
-                        <span class="links_name">Order list</span>
+                      <a href="{% url 'bio' %}">
+                        <span class="icon"><i class="fas fa-user"></i></span>
+                        <span class="title">Profile</span>
                       </a>
                     </li>
                     <li>
-                      <a href="#">
-                        <i class='bx bx-pie-chart-alt-2' ></i>
-                        <span class="links_name">Analytics</span>
+                      <a href="{% url 'student' %}">
+                        <span class="icon"><i class="fas fa-align-justify"></i></span>
+                        <span class="title">Applications</span>
                       </a>
                     </li>
                     <li>
+                      <li>
+                        <a href="#">
+                          <span class="icon"><i class="fas fa-unlock"></i></span>
+                          <span class="title">Reset Password</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="">
+                          <span class="icon"><i class="fas fa-sign-out-alt"></i></span>
+                          <span class="title">Logout</span>
+                        </a>
+                         <a href="">
+                          <span class="icon"><i class="fas fa-sign-out-alt"></i></span>
+                          <span class="title">Welcome, {{user.username}}</span>
+                        </a>
+                      </li>
+                      {% elif user.is_authenticated and user.is_staff %}
+                      <li>
+                        <a href="#">
+                          <span class="icon"><i class="fas fa-home"></i></span>
+                          <span class="title">Home</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="{% url 'bio' %}">
+                          <span class="icon"><i class="fas fa-user"></i></span>
+                          <span class="title">Profile</span>
+                        </a>
+                      </li>
+                      <li>
+                        <li>
+                          <a href="#">
+                            <span class="icon"><i class="fas fa-pause-circle"></i></span>
+                            <span class="title">Pending Applications</span>
+                          </a>
+                        </li>
+                        <li>
+                          <a href="">
+                            <span class="icon"><i class="fas fa-sign-out-alt"></i></span>
+                            <span class="title">Logout</span>
+                          </a>
+                        </li>
+                        {% endif %}
+                        {% if user.is_authenticated and user.is_sponsor %}
+                        <li>
+                          <a href="#">
+                            <span class="icon"><i class="fas fa-home"></i></span>
+                            <span class="title">Home</span>
+                          </a>
+                        </li>
+                        <li>
+                          <a href="{% url 'bio' %}">
+                            <span class="icon"><i class="fas fa-user"></i></span>
+                            <span class="title">Profile</span>
+                          </a>
+                        </li>
+                        <li>
+                          <li>
+                            <a href="#">
+                              <span class="icon"><i class="fas fa-pause-circle"></i></span>
+                              <span class="title">Approved Applications</span>
+                            </a>
+                          </li>
+                          <li>
+                            <a href="">
+                              <span class="icon"><i class="fas fa-sign-out-alt"></i></span>
+                              <span class="title">Logout</span>
+                            </a>
+                          </li>
+                          {% endif %}
+                          {% if not.user.is_authenticated %}
+                          return redirect('')
+                        {% endif %}
+                    {% comment %} <li>
                       <a href="#">
-                        <i class='bx bx-coin-stack' ></i>
-                        <span class="links_name">Stock</span>
+                        <span class="icon"><i class="fas fa-pause-circle"></i></span>
+                        <span class="title">Pending Applications</span>
                       </a>
                     </li>
                     <li>
-                      <a href="#">
-                        <i class='bx bx-book-alt' ></i>
-                        <span class="links_name">Total order</span>
+                      <a href="">
+                        <span class="icon"><i class="fas fa-check-circle"></i></span>
+                        <span class="title">Approved Applications</span>
                       </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <i class='bx bx-user' ></i>
-                        <span class="links_name">Profile</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <i class='bx bx-message' ></i>
-                        <span class="links_name">Messages</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <i class='bx bx-heart' ></i>
-                        <span class="links_name">Favorites</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <i class='bx bx-cog' ></i>
-                        <span class="links_name">Setting</span>
-                      </a>
-                    </li>
+                    </li> {% endcomment %}
+                    
+                   
                     <li class="log_out">
                       <a href="{% url 'login'%}">
                         <i class='bx bx-log-out'></i>

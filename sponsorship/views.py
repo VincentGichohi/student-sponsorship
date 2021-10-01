@@ -7,7 +7,7 @@ from django.core.mail import send_mail, BadHeaderError
 from django.contrib.auth import login as django_login, logout as django_logout, authenticate as django_authenticate
 from django.contrib.auth.decorators import login_required
 from .forms import AuthenticationForm, RegistrationForm, BioForm, SchoolForm, RecommendationForm, ContactForm
-
+from .models import Student, Sponsor
 
 # Create your views here.
 
@@ -24,7 +24,8 @@ def register_request(request):
 			login(request, user)
 			messages.success(request, "Registration successful." )
 			return redirect("login")
-		messages.error(request, "Unsuccessful registration. Invalid information.")
+		else:
+			messages.error(request, "Unsuccessful registration. Invalid information.")
 	form = RegistrationForm()
 	return render (request,"sponsorship/register.html",{"register_form":form})
 
@@ -125,4 +126,8 @@ def sponsor(request):
 	return render(request, 'sonsorship/sponsor.html')
 
 def student_table(request):
-	return render(request, 'sponsorship/student_table.html')
+	sdetails=Sponsor.objects.all()
+	context={
+		'sdetails':sdetails
+	}
+	return render(request, 'sponsorship/student_table.html',context)

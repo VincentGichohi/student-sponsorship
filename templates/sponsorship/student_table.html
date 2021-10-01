@@ -4,18 +4,20 @@
 {% load crispy_forms_tags %}
 {% block content %}
     <table>
-        <th>Welcome to My first table</th>
-        <th>Welcome to My second table</th>
-        <th>Welcome to My third table</th>
-        <th>Welcome to My fourth table</th>
-        <th>Welcome to My fitth table</th>
-
+        <th>NAME</th>
+        <th>COUNTRY</th>
+        <th>SPONSORED SCHOOL</th>
+        <th>TYPE OF SPONSORSHIP</th>
+        <!-- <th>Welcome to My fitth table</th> -->
+        {% for sd in sdetails %}
         <tr>
-            <td>Welcome</td>
-            <td>to</td>
-            <td>my</td>
-            <td>Welcome</td>
-            <td>page</td>   
+            <td>{{ sd.sponsorName }}</td>
+            <td>{{ sd.country }}</td>
+            <td>{{ sd.sponsoredSchool }}</td>
+            <td>{{ sd.type_of_sponsorship }}</td>
+            
+            <!-- <td>page</td>    -->
         </tr>
+        {% endfor %}
     </table>
 {% endblock %}
