@@ -543,8 +543,8 @@ table th{
                             </a>
                           </li>
                           <li>
-                            <a href="">
-                              <span class="icon"><i class="fas fa-sign-out-alt"></i></span>
+                            <a href="{% url 'login' %}">
+                              <span class="icon"><i class="fas %fa-sign-out-alt"></i></span>
                               <span class="title">Logout</span>
                             </a>
                           </li>
@@ -566,12 +566,12 @@ table th{
                     </li> {% endcomment %}
                     
                    
-                    <li class="log_out">
+                    {% comment %} <li class="log_out">
                       <a href="{% url 'login'%}">
                         <i class='bx bx-log-out'></i>
                         <span class="links_name">Log out</span>
                       </a>
-                    </li>
+                    </li> {% endcomment %}
                   </ul>
               </div>
         </div>
