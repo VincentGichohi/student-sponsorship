@@ -1,43 +1,31 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import Student, Sponsor, User
+from django.contrib.auth.admin import UserAdmin
+from .models import Student, Sponsor, CustomUser
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
-# from .models import User
-
-# Register your models here.
+from .forms import RegistrationForm, CustomUserChangeForm, RegistrationForm
 
 admin.site.register(Student)
 admin.site.register(Sponsor)
-# admin.site.register(User)
-
-
-class UserAdmin(BaseUserAdmin):
+# Register your models here.
+class CustomUserAdmin(UserAdmin):
+    add_form = RegistrationForm
+    form = CustomUserChangeForm
+    model = CustomUser
+    list_display = ('email', 'is_staff', 'is_active','is_superuser','is_sponsor')
+    list_filter = ('email', 'is_staff', 'is_active','is_superuser','is_sponsor')
     fieldsets = (
-        (None, {'fields': ('email', 'password', 'name', 'last_login')}),
-        ('Permissions', {'fields': (
-            'is_active', 
-            'is_staff', 
-            'is_superuser',
-            'groups', 
-            'user_permissions',
-        )}),
+        (None, {'fields': ('email', 'password')}),
+        ('Permissions', {'fields': ('is_staff', 'is_active','is_superuser','is_sponsor')}),
     )
     add_fieldsets = (
-        (
-            None,
-            {
-                'classes': ('wide',),
-                'fields': ('email', 'password1', 'password2')
-            }
+        (None, {
+            'classes': ('wide',),
+            'fields': ('email', 'password1', 'password2', 'is_staff', 'is_active','is_superuser','is_sponsor')}
         ),
     )
-
-    list_display = ('email', 'name', 'is_staff', 'last_login')
-    list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
     search_fields = ('email',)
     ordering = ('email',)
-    filter_horizontal = ('groups', 'user_permissions',)
 
 
-admin.site.register(User, UserAdmin)
+admin.site.register(CustomUser, CustomUserAdmin)

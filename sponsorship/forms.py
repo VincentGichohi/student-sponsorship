@@ -1,57 +1,96 @@
 from .models import Student, Sponsor
 from django import forms
 from django.forms import  ModelForm
+from django.contrib.auth import authenticate
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm
-from .models import User
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from .models import CustomUser
+
 
 class RegistrationForm(UserCreationForm):
-    email = forms.EmailField(widget=forms.TextInput(
-        attrs={'class': 'form-control','type':'text','name': 'email'}),
-        label="Email")
-    password1 = forms.CharField(widget=forms.PasswordInput(
-        attrs={'class':'form-control','type':'password', 'name':'password1'}),
-        label="Password")
-    password2 = forms.CharField(widget=forms.PasswordInput(
-        attrs={'class':'form-control','type':'password', 'name': 'password2'}),
-        label="Password (again)")
-
-    '''added attributes so as to customise for styling, like bootstrap'''
+    """
+      Form for Registering new users 
+    """
+    email = forms.EmailField(max_length=60, help_text = 'Required. Add a valid email address')
     class Meta:
-        model = User
-        fields = ['email','password1','password2']
-        field_order = ['email','password1','password2']
+        model = CustomUser
+        fields = ('email', 'password1', 'password2')
+
+    def __init__(self, *args, **kwargs):
+        """
+          specifying styles to fields 
+        """
+        super(RegistrationForm, self).__init__(*args, **kwargs)
+        for field in (self.fields['email'],self.fields['password1'],self.fields['password2']):
+            field.widget.attrs.update({'class': 'form-control '})
+    # class Meta:
+    #     model = CustomUser
+    #     fields = ('email',)
+
+class AccountAuthenticationForm(forms.ModelForm):
+    """
+      Form for Logging in  users
+    """
+    password  = forms.CharField(label= 'Password', widget=forms.PasswordInput)
+
+    class Meta:
+        model  =  CustomUser
+        fields =  ('email', 'password')
+        widgets = {
+                   'email':forms.TextInput(attrs={'class':'form-control'}),
+                   'password':forms.TextInput(attrs={'class':'form-control'}),
+        }
+    def __init__(self, *args, **kwargs):
+        """
+          specifying styles to fields 
+        """
+        super(AccountAuthenticationForm, self).__init__(*args, **kwargs)
+        for field in (self.fields['email'],self.fields['password']):
+            field.widget.attrs.update({'class': 'form-control '})
 
     def clean(self):
+        if self.is_valid():
+
+            email = self.cleaned_data.get('email')
+            password = self.cleaned_data.get('password')
+            if not authenticate(email=email, password=password):
+                raise forms.ValidationError('Invalid Login')
+
+class AccountUpdateform(forms.ModelForm):
+    """
+      Updating User Info
+    """
+    class Meta:
+        model  = CustomUser
+        fields = ('email',)
+        widgets = {
+                   'email':forms.TextInput(attrs={'class':'form-control'}),
+                   'password':forms.TextInput(attrs={'class':'form-control'}),
+        }
+
+    def __init__(self, *args, **kwargs):
         """
-        Verifies that the values entered into the password fields match
-        NOTE : errors here will appear in 'non_field_errors()'
+          specifying styles to fields 
         """
-        cleaned_data = super(RegistrationForm, self).clean()
-        if 'password1' in self.cleaned_data and 'password2' in self.cleaned_data:
-            if self.cleaned_data['password1'] != self.cleaned_data['password2']:
-                raise forms.ValidationError("Passwords don't match. Please try again!")
-        return self.cleaned_data
+        super(AccountUpdateform, self).__init__(*args, **kwargs)
+        for field in (self.fields['email']):
+            field.widget.attrs.update({'class': 'form-control '})
 
-    def save(self, commit=True):
-        user = super(RegistrationForm,self).save(commit=False)
-        user.set_password(self.cleaned_data['password1'])
-        if commit:
-            user.save()
-        return user
+    def clean_email(self):
+        if self.is_valid():
+            email = self.cleaned_data['email']
+            try:
+                account = CustomUser.objects.exclude(pk = self.instance.pk).get(email=email)
+            except CustomUser.DoesNotExist:
+                return email
+            raise forms.ValidationError("Email '%s' already in use." %email)
 
-#The save(commit=False) tells Django to save the new record, but dont commit it to the database yet
-
-class AuthenticationForm(forms.Form): # Note: forms.Form NOT forms.ModelForm
-    email = forms.EmailField(widget=forms.TextInput(
-        attrs={'class': 'form-control','type':'text','name': 'email','placeholder':'Email'}), 
-        label='Email')
-    password = forms.CharField(widget=forms.PasswordInput(
-        attrs={'class':'form-control','type':'password', 'name': 'password','placeholder':'Password'}),
-        label='Password')
+class CustomUserChangeForm(UserChangeForm):
 
     class Meta:
-        fields = ['email', 'password']
+        model = CustomUser
+        fields = ('email',)
 
 class ContactForm(forms.Form):
 	first_name = forms.CharField(max_length = 50)
@@ -64,6 +103,12 @@ class BioForm(ModelForm):
     class Meta:
         model=Student
         fields=('first_name','last_name','address','phone','email')
+
+class Success(forms.Form):
+    Email=forms.EmailField()
+
+    def __str__(self):
+        return self.Email
 
 
 class SchoolForm(ModelForm):

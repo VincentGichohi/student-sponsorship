@@ -438,8 +438,9 @@ table{
   border: 2px solid black;
   width:100%;
 }
-table th{
+table th, td{
   border-collapse: collapse;
+  border: 1 px solid black;
 }
     </style>
    </head>
@@ -552,32 +553,11 @@ table th{
                           {% if not.user.is_authenticated %}
                           return redirect('')
                         {% endif %}
-                    {% comment %} <li>
-                      <a href="#">
-                        <span class="icon"><i class="fas fa-pause-circle"></i></span>
-                        <span class="title">Pending Applications</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="">
-                        <span class="icon"><i class="fas fa-check-circle"></i></span>
-                        <span class="title">Approved Applications</span>
-                      </a>
-                    </li> {% endcomment %}
-                    
-                   
-                    {% comment %} <li class="log_out">
-                      <a href="{% url 'login'%}">
-                        <i class='bx bx-log-out'></i>
-                        <span class="links_name">Log out</span>
-                      </a>
-                    </li> {% endcomment %}
-                  </ul>
               </div>
         </div>
          <div class="col-9">
              {% block content %}
-
+              {% include 'sponsorship/messages.html' %}
              {% endblock %}
          </div>
 </div>

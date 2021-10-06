@@ -3,19 +3,25 @@
 
 {% load crispy_forms_tags %}
 {% block content %}
-    <table>
-        <th>NAME</th>
-        <th>COUNTRY</th>
-        <th>SPONSORED SCHOOL</th>
-        <th>TYPE OF SPONSORSHIP</th>
-        <!-- <th>Welcome to My fitth table</th> -->
-        {% for sd in sdetails %}
-        <tr>
-            <td>{{ sd.sponsorName }}</td>
-            <td>{{ sd.country }}</td>
-            <td>{{ sd.sponsoredSchool }}</td>
-            <td>{{ sd.type_of_sponsorship }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+<div class="container">
+    <div class="bg bg-success">
+        <table class="table-table-hover">
+            <th>NAME</th>
+            <th>COUNTRY</th>
+            <th>SPONSORED SCHOOL</th>
+            <th>TYPE OF SPONSORSHIP</th>
+            <!-- <th>Welcome to My fitth table</th> -->
+            {% for sd in sdetails %}
+            <tr class="danger">
+                <td>{{ sd.sponsorName }}</td>
+                <td>{{ sd.country }}</td>
+                <td>{{ sd.sponsoredSchool }}</td>
+                <td>{{ sd.type_of_sponsorship }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</div>
+    
 {% endblock %}
