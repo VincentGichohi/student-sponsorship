@@ -53,9 +53,14 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return self.email
     
 
+class StudentName(models.Model):
+    first_name=models.CharField(max_length=50)
+    last_name=models.CharField(max_length=50)
+
 class Student(models.Model):
-    first_name=models.CharField(max_length=100)
-    last_name=models.CharField(max_length=100)
+    first_name=models.CharField(max_length=50)
+    last_name=models.CharField(max_length=50)
+    full_names=models.ForeignKey(StudentName, on_delete=models.CASCADE)
     address=models.CharField(max_length=50)
     phone=models.IntegerField()
     email=models.EmailField(default=None, unique=True)
@@ -74,7 +79,7 @@ class Student(models.Model):
 
 class Sponsor(models.Model):
     sponsorName=models.CharField(max_length=200)
-    country=models.CharField(max_length=200)
+    country_of_origin=models.CharField(max_length=200)
     sponsoredSchool=models.CharField(max_length=200)
     type_of_sponsorship=models.TextField(default=None)
 

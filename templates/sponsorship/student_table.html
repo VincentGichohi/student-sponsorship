@@ -6,17 +6,18 @@
 <div class="container">
     <div class="bg bg-success">
         <table class="table-table-hover">
-            <th>NAME</th>
-            <th>COUNTRY</th>
+            <th>SPONSOR NAME</th>
+            <th>COUNTRY OF ORIGIN</th>
             <th>SPONSORED SCHOOL</th>
             <th>TYPE OF SPONSORSHIP</th>
-            <!-- <th>Welcome to My fitth table</th> -->
             {% for sd in sdetails %}
             <tr class="danger">
                 <td>{{ sd.sponsorName }}</td>
                 <td>{{ sd.country }}</td>
                 <td>{{ sd.sponsoredSchool }}</td>
                 <td>{{ sd.type_of_sponsorship }}</td>
+                <td><button type="button" class="btn btn-primary">Apply</button>
+                </td>
             </tr>
             {% endfor %}
         </table>

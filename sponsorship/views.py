@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.core.mail import send_mail, BadHeaderError
 from django.contrib.auth import authenticate,login, logout
 from django.contrib.auth.decorators import login_required
-from .forms import BioForm, SchoolForm, RecommendationForm, ContactForm,RegistrationForm,AccountAuthenticationForm,AccountUpdateform
+from .forms import BioForm, ContactForm,RegistrationForm,AccountAuthenticationForm,AccountUpdateform
 from .models import Student, Sponsor, CustomUser
 from flask import request
 from . import forms
@@ -151,33 +151,33 @@ def bio(request):
 	form=BioForm
 	return render(request, 'sponsorship/bio.html', {"form":form,'submitted':submitted})
 
-def school(request):
-	submitted=False
-	if request.method=="POST":
-			form=SchoolForm(request.POST)
-			if form.is_valid():
-				form.save()
-				return HttpResponseRedirect('/school? submitted=True')
-	else:
-		form=SchoolForm
-		if 'submitted' in request.GET:
-			submitted=True
-	form=SchoolForm
-	return render(request,'sponsorship/school.html', {"form":form,'submitted':submitted})
+# def school(request):
+# 	submitted=False
+# 	if request.method=="POST":
+# 			form=SchoolForm(request.POST)
+# 			if form.is_valid():
+# 				form.save()
+# 				return HttpResponseRedirect('/school? submitted=True')
+# 	else:
+# 		form=SchoolForm
+# 		if 'submitted' in request.GET:
+# 			submitted=True
+# 	form=SchoolForm
+# 	return render(request,'sponsorship/school.html', {"form":form,'submitted':submitted})
 
-def recommendation(request):
-		submitted=False
-		if request.method=="POST":
-				form=RecommendationForm(request.POST)
-				if form.is_valid():
-					form.save()
-					return HttpResponseRedirect('/reasons? submitted=True')
-		else:
-			form=RecommendationForm
-			if 'submitted' in request.GET:
-				submitted=True
-		form=RecommendationForm
-		return render(request,'sponsorship/recommendation.html',{"form":form,'submitted':submitted})
+# def recommendation(request):
+# 		submitted=False
+# 		if request.method=="POST":
+# 				form=RecommendationForm(request.POST)
+# 				if form.is_valid():
+# 					form.save()
+# 					return HttpResponseRedirect('/reasons? submitted=True')
+# 		else:
+# 			form=RecommendationForm
+# 			if 'submitted' in request.GET:
+# 				submitted=True
+# 		form=RecommendationForm
+# 		return render(request,'sponsorship/recommendation.html',{"form":form,'submitted':submitted})
 
 def index(request):
     return render(request, 'sponsorship/index.html')

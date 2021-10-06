@@ -115,6 +115,7 @@ button:hover{
 </style>
 </head>
 <body>
+
     <img src="{% static 'scholarship/dashboard.jpg' %}" alt="dashboard">
     <div class="banner">
 
@@ -123,10 +124,23 @@ button:hover{
             <p>Here to take your dreams to the next level</p>
             <div>
                 <a href="{% url 'register' %}">
-                    <button type="button"><span></span>Create Account</button>
+                    <button type="button"><span></span>Become A Student</button>
+                </a>
+                <a href="{% url 'register' %}">
+                    <button type="button"><span></span>Become A Sponsor</button>
+                </a>
+                <a href="{% url 'register' %}">
+                    <button type="button"><span></span>Become A Staff</button>
+                </a><br>
+                
+                <a href="{% url 'login' %}">
+                    <button type="button"><span></span>Login As A Staff</button>
                 </a>
                 <a href="{% url 'login' %}">
-                    <button type="button"><span></span>Login</button>
+                    <button type="button"><span></span>Login As A Student</button>
+                </a>
+                <a href="{% url 'login' %}">
+                    <button type="button"><span></span>Login As A Sponsor</button>
                 </a>
                 
             </div>

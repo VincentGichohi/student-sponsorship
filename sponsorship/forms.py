@@ -1,6 +1,6 @@
-from .models import Student, Sponsor
+from .models import Student, Sponsor, StudentName
 from django import forms
-from django.forms import  ModelForm
+from django.forms import  ModelForm, fields
 from django.contrib.auth import authenticate
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
@@ -98,11 +98,23 @@ class ContactForm(forms.Form):
 	email_address = forms.EmailField(max_length = 150)
 	message = forms.CharField(widget = forms.Textarea, max_length = 2000)
     
+class NameForm(forms.Form):
+
+    class Meta:
+        model= StudentName
+        fields=('first_name','last_name')
 class BioForm(ModelForm):
 
     class Meta:
         model=Student
-        fields=('first_name','last_name','address','phone','email')
+        fields=('first_name',
+        'last_name','address',
+        'phone','email',
+        'birth_certificate',
+        'national_id_file',
+        'school_name','school_address','academic_level','expected_year_of_completion',
+        'reasons_for_sponsorship',
+        'recommendation_letter')
 
 class Success(forms.Form):
     Email=forms.EmailField()
@@ -123,3 +135,11 @@ class RecommendationForm(ModelForm):
     class Meta:
         model=Student
         fields=('reasons_for_sponsorship','recommendation_letter')
+
+class SponsorForm(forms.Form):
+
+    class Meta:
+        model=Sponsor
+        fields=(
+            'sponsorName','country_of_origin','sponsoredSchool','type_of_sponsorship'
+        )

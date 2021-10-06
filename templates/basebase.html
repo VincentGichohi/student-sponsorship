@@ -47,9 +47,9 @@ a{color:inherit;text-decoration:none}
   </style>
   </head>
   <body>
-{% block content %}
-{% load crispy_forms_tags %}
-
-{% endblock %}
+  {% include 'sponsorship/messages.html' %}
+	{% block content %}
+	{% load crispy_forms_tags %}
+	{% endblock %}
 </body>
 </html>
