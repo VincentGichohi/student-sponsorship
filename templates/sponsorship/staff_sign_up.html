@@ -7,7 +7,7 @@
     <div class="login-title">
       <h1>Register as a Staff</h1>
     </div>
-    <form method="POST" action="{% url 'register' %}">
+    <form method="POST" action="{% url 'login' %}">
       {% csrf_token %}
       {{ form|crispy }}      
       <a href="{% url 'login' %}">

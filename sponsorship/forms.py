@@ -1,11 +1,12 @@
-from .models import Student, Sponsor, StudentName
+from .models import Student, Sponsor
 from django import forms
 from django.forms import  ModelForm, fields
 from django.contrib.auth import authenticate
 from django.contrib.auth import get_user_model
+from django.db import transaction
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
-from .models import CustomUser
+from .models import User
 
 
 class RegistrationForm(UserCreationForm):
@@ -14,7 +15,7 @@ class RegistrationForm(UserCreationForm):
     """
     email = forms.EmailField(max_length=60, help_text = 'Required. Add a valid email address')
     class Meta:
-        model = CustomUser
+        model = User
         fields = ('email', 'password1', 'password2')
 
     def __init__(self, *args, **kwargs):
@@ -35,7 +36,7 @@ class AccountAuthenticationForm(forms.ModelForm):
     password  = forms.CharField(label= 'Password', widget=forms.PasswordInput)
 
     class Meta:
-        model  =  CustomUser
+        model  =  User
         fields =  ('email', 'password')
         widgets = {
                    'email':forms.TextInput(attrs={'class':'form-control'}),
@@ -62,7 +63,7 @@ class AccountUpdateform(forms.ModelForm):
       Updating User Info
     """
     class Meta:
-        model  = CustomUser
+        model  = User
         fields = ('email',)
         widgets = {
                    'email':forms.TextInput(attrs={'class':'form-control'}),
@@ -89,7 +90,7 @@ class AccountUpdateform(forms.ModelForm):
 class CustomUserChangeForm(UserChangeForm):
 
     class Meta:
-        model = CustomUser
+        model = User
         fields = ('email',)
 
 class ContactForm(forms.Form):
@@ -97,12 +98,45 @@ class ContactForm(forms.Form):
 	last_name = forms.CharField(max_length = 50)
 	email_address = forms.EmailField(max_length = 150)
 	message = forms.CharField(widget = forms.Textarea, max_length = 2000)
-    
-class NameForm(forms.Form):
 
-    class Meta:
-        model= StudentName
-        fields=('first_name','last_name')
+class StudentSignUpForm(UserCreationForm):
+
+    class Meta(UserCreationForm.Meta):
+        model = User
+        fields= ('email', 'is_student')
+
+    @transaction.atomic
+    def save(self):
+        user=super().save(commit=False)
+        user.is_student=True
+        user.save()
+        student=Student.objects.create(user=user)
+        return user
+class SponsorSignUpForm(UserCreationForm):
+    model = User
+    fields = ('email', 'is_sponsor')
+
+    @transaction.atomic
+    def save(self):
+        user = super().save(commit=False)
+        user.is_sponsor= True
+        user.save()
+        sponsor= Sponsor.objects.create(user=user)
+        return user
+class StaffSignUpForm(UserCreationForm):
+
+    class Meta(UserCreationForm.Meta):
+        model = User
+        fields = ('email','is_staff')
+
+    def save(self, commit = True):
+        user = super().save(commit=False)
+        user.is_staff = True
+        if commit:
+            user.save()
+        return user
+
+#a form for updating Bio information
 class BioForm(ModelForm):
 
     class Meta:
@@ -112,9 +146,23 @@ class BioForm(ModelForm):
         'phone','email',
         'birth_certificate',
         'national_id_file',
-        'school_name','school_address','academic_level','expected_year_of_completion',
-        'reasons_for_sponsorship',
-        'recommendation_letter')
+        )
+#a form for updating School information
+class SchoolForm(ModelForm):
+
+    class Meta:
+        model = Student
+        fields = (
+            'school_name','school_address','academic_level','expected_year_of_completion'
+        )
+#a form for updating Recommendation and reasons
+class RecommendationForm(ModelForm):
+
+    class Meta:
+        model= Student
+        fields = (
+            'reasons_for_sponsorship','recommendation_letter'
+        )
 
 class Success(forms.Form):
     Email=forms.EmailField()
@@ -123,18 +171,18 @@ class Success(forms.Form):
         return self.Email
 
 
-class SchoolForm(ModelForm):
-
-    class Meta:
-        model=Student
-        fields=('school_name','school_address','academic_level','expected_year_of_completion')
-
-        
-class RecommendationForm(ModelForm):
-
-    class Meta:
-        model=Student
-        fields=('reasons_for_sponsorship','recommendation_letter')
+# class SchoolForm(ModelForm):
+#
+#     class Meta:
+#         model=Student
+#         fields=('school_name','school_address','academic_level','expected_year_of_completion')
+#
+#
+# class RecommendationForm(ModelForm):
+#
+#     class Meta:
+#         model=Student
+#         fields=('reasons_for_sponsorship','recommendation_letter')
 
 class SponsorForm(forms.Form):
 

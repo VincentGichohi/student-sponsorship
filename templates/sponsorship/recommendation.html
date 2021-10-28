@@ -10,9 +10,9 @@
   {% if submitted %}
     Your Form was submitted Successfully!
   {% else %}
-    <form action="" method="post">
+    <form action="{% url 'dashboard' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}
+        {{ form|crispy }}
         <input type="submit" value="Submit" class="btn-btn-secondary">
       </form>
   </center>

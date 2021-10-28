@@ -460,7 +460,7 @@ table th, td{
                         <span class="links_name">Dashboard</span>
                       </a>
                     </li>
-                    
+                    {% if request.user.is_authenticated %}
                     <li>
                       <a href="#">
                         <span class="icon"><i class="fas fa-home"></i></span>
@@ -491,6 +491,7 @@ table th, td{
                           <span class="icon"><i class="fas fa-sign-out-alt"></i></span>
                           <span class="title">Logout</span>
                         </a>
+                        {% endif %}
                          <a href="">
                           <span class="icon"><i class="fas fa-sign-out-alt"></i></span>
                           <span class="title">Welcome, {{user.username}}</span>
@@ -549,7 +550,6 @@ table th, td{
                               <span class="title">Logout</span>
                             </a>
                           </li>
-                          
                           {% if not.user.is_authenticated %}
                           return redirect('index')
                         {% endif %}

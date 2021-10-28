@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser,PermissionsMixin
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
+# from django.utils.translation import ugettext_lazy as _
 # Create your models here.
 
 class CustomUserManager(BaseUserManager):
@@ -36,10 +36,16 @@ class CustomUserManager(BaseUserManager):
             raise ValueError(_('Superuser must have is_superuser=True.'))
         return self.create_user(email, password, **extra_fields)
 
-class CustomUser(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(_('email address'), unique=True)
+class User(AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField(
+        verbose_name='email address',
+        max_length=255,
+        unique=True,
+    )
     is_staff = models.BooleanField(default=False)
     is_sponsor = models.BooleanField(default=True)
+    is_student = models.BooleanField(default=False)
+    is_admin = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)
@@ -51,16 +57,30 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
-    
 
-class StudentName(models.Model):
-    first_name=models.CharField(max_length=50)
-    last_name=models.CharField(max_length=50)
+    def get_full_name(self):
+        # The user is identified by their email address
+        return self.email
+
+    def get_short_name(self):
+        # The user is identified by their email address
+        return self.email
+
+    def has_perm(self, perm, obj=None):
+        "Does the user have a specific permission?"
+        # Simplest possible answer: Yes, always
+        return True
+
+    def has_module_perms(self, app_label):
+        "Does the user have permissions to view the app `app_label`?"
+        # Simplest possible answer: Yes, always
+        return True
+
 
 class Student(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     first_name=models.CharField(max_length=50)
     last_name=models.CharField(max_length=50)
-    full_names=models.ForeignKey(StudentName, on_delete=models.CASCADE)
     address=models.CharField(max_length=50)
     phone=models.IntegerField()
     email=models.EmailField(default=None, unique=True)
@@ -78,11 +98,28 @@ class Student(models.Model):
         return self.first_name
 
 class Sponsor(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    sponsorship_choices =(
+        ('Full scholarship', 'Full scholarship'),
+        ('Partial Sponsorship', 'Partial Sponsorship')
+    )
     sponsorName=models.CharField(max_length=200)
-    country_of_origin=models.CharField(max_length=200)
+    country=models.CharField(max_length=200)
     sponsoredSchool=models.CharField(max_length=200)
-    type_of_sponsorship=models.TextField(default=None)
+    type_of_sponsorship=models.CharField(max_length=100, choices=sponsorship_choices)
 
     def __str__(self):
         return self.sponsorName
     
+class Applications(models.Model):
+    status_choices= {
+        ('Pending approval','Pending'),
+        ('Approved','Approved'),
+        ('Rejected','Rejected')
+    }
+    studentId = models.ForeignKey(Student, on_delete=models.CASCADE)
+    sponsorId = models.ForeignKey(Sponsor,on_delete=models.CASCADE)
+    sponsorType = models.TextField(max_length=200, choices=status_choices)
+
+    def __str__(self):
+        return self.studentId

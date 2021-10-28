@@ -6,13 +6,14 @@ from django.contrib import messages
 from django.core.mail import send_mail, BadHeaderError
 from django.contrib.auth import authenticate,login, logout
 from django.contrib.auth.decorators import login_required
-from .forms import BioForm, ContactForm,RegistrationForm,AccountAuthenticationForm,AccountUpdateform
-from .models import Student, Sponsor, CustomUser
+from .forms import BioForm, ContactForm,SchoolForm,StudentSignUpForm,SponsorSignUpForm,StaffSignUpForm, RecommendationForm, RegistrationForm,AccountAuthenticationForm,AccountUpdateform
+from .models import Student, Sponsor, User
+from django.views.generic import CreateView
 from flask import request
 from . import forms
 # Create your views here.
 
-
+@ login_required
 def dashboard(request):
     return render(request, 'sponsorship/dashboard.html')
 
@@ -32,7 +33,7 @@ def register_request(request):
 			raw_pass = form.cleaned_data.get('password1')
 			user = authenticate(email=email, password = raw_pass)
 			login(request, user)
-			messages.success(request, "You have been Registered as {}".format(request.user.username))
+			messages.success(request, "You have been Registered as {}".format(request.user.email))
 			return redirect('login')
 		else:
 			messages.error(request, "Please Correct Below Errors")
@@ -51,17 +52,17 @@ def login_request(request):
 	user=request.user
 	if user.is_authenticated:
 		return redirect('login')
-	if request.method=='POST':
-		form=AccountAuthenticationForm(request.POST)
-		email=request.POST.get('email')
-		password=request.POST.get('password')
-		user=authenticate(email=email, password=password)
+	if request.method == 'POST':
+		form = AccountAuthenticationForm(request.POST)
+		email = request.POST.get('email')
+		password= request.POST.get('password')
+		user = authenticate(email=email, password=password)
 		if user:
 			login(request, user)
-			messages.success(request, 'Logged In')
+			messages.success(request, 'You have successfully logged in')
 			return redirect('dashboard')
 		else:
-			messages.error('please Correct Below Errors')
+			messages.error('Please Correct Below Errors')
 	
 	else:
 		form=AccountAuthenticationForm
@@ -89,7 +90,6 @@ def account_view (request):
         form  = AccountUpdateform(
             initial={
             'email':request.user.email,
-            'username':request.user.username,
             }
         )
     context['account_form']=form
@@ -123,8 +123,10 @@ def contact(request):
     messages.error(request, "Error. Message not sent.")
       
   form = ContactForm()
-  return render(request, "sponsorship/contact.html", {'form':form})
+  context = {'form':form}
+  return render(request, "sponsorship/contact.html", context)
 
+# a view message for sending email success message
 def success(request):
     sub = forms.Success()
     if request.method == 'POST':
@@ -137,11 +139,56 @@ def success(request):
         return render(request, 'subscribe/success.html', {'recepient': recepient})
     return render(request, 'subscribe/index.html', {'form':sub})
 
+#a view for uploading bio data
+
+class StudentSignUpView(CreateView):
+	model = User
+	form_class = StudentSignUpForm
+	template_name = 'sponsorship/student_sign_up.html'
+
+	def get_context_data(self, **kwargs):
+		kwargs['user_type'] = 'student'
+		return super().get_context_data(**kwargs)
+
+	def form_valid(self, form):
+		user = form.save()
+		login(self.request, user)
+		return redirect ('login')
+
+# a class for registering a staff
+class StaffSignUpView(CreateView):
+	model = User
+	form_class = StaffSignUpForm
+	template_name = 'sponsorship/sponsor_sign_up.html'
+
+	def get_context_data(self, **kwargs):
+		kwargs['user_type'] = 'staff'
+		return super().get_context_data(**kwargs)
+	def form_valid(self,form):
+		user = form.save()
+		login(self.request,user)
+		return redirect('login')
+
+class SponsorSignUpView(CreateView):
+	model = User
+	form_class = SponsorSignUpForm
+	template_name = 'sponsorship/sponsor_sign_up.html'
+
+	def get_context_data(self, **kwargs):
+		kwargs['user_type'] = 'sponsor'
+		return super().get_context_data(**kwargs)
+	def form_valid(self, form):
+		user= form.save()
+		login(self.request, user)
+		return redirect('login')
+
+#a view for uploading the bio data
 def bio(request):
 	submitted=False
 	if request.method=="POST":
-			form=BioForm(request.POST)
+			form=BioForm(request.POST, request.FILES)
 			if form.is_valid():
+				form.instance.user = request.user
 				form.save()
 				return HttpResponseRedirect('/bio? submitted=True')
 	else:
@@ -151,34 +198,40 @@ def bio(request):
 	form=BioForm
 	return render(request, 'sponsorship/bio.html', {"form":form,'submitted':submitted})
 
-# def school(request):
-# 	submitted=False
-# 	if request.method=="POST":
-# 			form=SchoolForm(request.POST)
-# 			if form.is_valid():
-# 				form.save()
-# 				return HttpResponseRedirect('/school? submitted=True')
-# 	else:
-# 		form=SchoolForm
-# 		if 'submitted' in request.GET:
-# 			submitted=True
-# 	form=SchoolForm
-# 	return render(request,'sponsorship/school.html', {"form":form,'submitted':submitted})
+#a view for updating school information
 
-# def recommendation(request):
-# 		submitted=False
-# 		if request.method=="POST":
-# 				form=RecommendationForm(request.POST)
-# 				if form.is_valid():
-# 					form.save()
-# 					return HttpResponseRedirect('/reasons? submitted=True')
-# 		else:
-# 			form=RecommendationForm
-# 			if 'submitted' in request.GET:
-# 				submitted=True
-# 		form=RecommendationForm
-# 		return render(request,'sponsorship/recommendation.html',{"form":form,'submitted':submitted})
+def school(request):
+	submitted=False
+	if request.method=="POST":
+			form=SchoolForm(request.POST, request.FILES)
+			if form.is_valid():
+				form.instance.user = request.user
+				form.save()
+				return HttpResponseRedirect('/school? submitted=True')
+	else:
+		form=SchoolForm
+		if 'submitted' in request.GET:
+			submitted=True
+	form=SchoolForm
+	return render(request,'sponsorship/school.html', {"form":form,'submitted':submitted})
 
+#a view for updating recommendation details
+
+def recommendation(request):
+		submitted=False
+		if request.method=="POST":
+				form=RecommendationForm(request.POST, request.FILES)
+				if form.is_valid():
+					form.instance.user = request.user
+					form.save()
+					return HttpResponseRedirect('/reasons? submitted=True')
+		else:
+			form=RecommendationForm
+			if 'submitted' in request.GET:
+				submitted=True
+		form=RecommendationForm
+		return render(request,'sponsorship/recommendation.html',{"form":form,'submitted':submitted})
+#the landing page after logging in
 def index(request):
     return render(request, 'sponsorship/index.html')
 

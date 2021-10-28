@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import Student, Sponsor, CustomUser
+from .models import Student, Sponsor, User
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from .forms import RegistrationForm, CustomUserChangeForm, RegistrationForm
@@ -11,12 +11,12 @@ admin.site.register(Sponsor)
 class CustomUserAdmin(UserAdmin):
     add_form = RegistrationForm
     form = CustomUserChangeForm
-    model = CustomUser
+    model = User
     list_display = ('email', 'is_staff', 'is_active','is_superuser','is_sponsor')
     list_filter = ('email', 'is_staff', 'is_active','is_superuser','is_sponsor')
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Permissions', {'fields': ('is_staff', 'is_active','is_superuser','is_sponsor')}),
+        ('Permissions', {'fields': ('is_staff', 'is_active','is_superuser','is_sponsor', 'is_student',)}),
     )
     add_fieldsets = (
         (None, {
@@ -28,4 +28,4 @@ class CustomUserAdmin(UserAdmin):
     ordering = ('email',)
 
 
-admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.register(User, CustomUserAdmin)
