@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser,PermissionsMixin
 from django.utils import timezone
+from django.contrib.auth import get_user_model
 # from django.utils.translation import ugettext_lazy as _
 # Create your models here.
 
@@ -15,7 +16,7 @@ class CustomUserManager(BaseUserManager):
         Create and save a User with the given email and password.
         """
         if not email:
-            raise ValueError(_('The Email must be set'))
+            raise ValueError('The Email must be set')
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
@@ -31,12 +32,12 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault('is_active', True)
 
         if extra_fields.get('is_staff') is not True:
-            raise ValueError(_('Superuser must have is_staff=True.'))
+            raise ValueError('Superuser must have is_staff=True.')
         if extra_fields.get('is_superuser') is not True:
-            raise ValueError(_('Superuser must have is_superuser=True.'))
+            raise ValueError('Superuser must have is_superuser=True.')
         return self.create_user(email, password, **extra_fields)
 
-class User(AbstractBaseUser, PermissionsMixin):
+class MyUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(
         verbose_name='email address',
         max_length=255,
@@ -78,27 +79,31 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Student(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(MyUser, on_delete=models.CASCADE, primary_key=True)
     first_name=models.CharField(max_length=50)
     last_name=models.CharField(max_length=50)
     address=models.CharField(max_length=50)
     phone=models.IntegerField()
-    email=models.EmailField(default=None, unique=True)
+    email=models.EmailField(unique=True)
     birth_certificate=models.FileField(upload_to='images')
     national_id_file=models.FileField(upload_to='images')
     school_name=models.CharField(max_length=200)
     school_address=models.CharField(max_length=100)
     academic_level=models.TextField()
-    expected_year_of_completion=models.DateField(default=None)
+    expected_year_of_completion=models.DateField()
     reasons_for_sponsorship=models.TextField()
     recommendation_letter=models.FileField(upload_to='images')
 
-    
+    class Meta:
+        permissions = (
+            ('can apply for sponsorship', 'apply for sponsorship'),
+            ('view sponsorship applications' , 'view applications')
+        )
     def __str__(self):
         return self.first_name
 
 class Sponsor(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(MyUser, on_delete=models.CASCADE, primary_key=True)
     sponsorship_choices =(
         ('Full scholarship', 'Full scholarship'),
         ('Partial Sponsorship', 'Partial Sponsorship')
@@ -108,11 +113,16 @@ class Sponsor(models.Model):
     sponsoredSchool=models.CharField(max_length=200)
     type_of_sponsorship=models.CharField(max_length=100, choices=sponsorship_choices)
 
+    class Meta:
+        permissions = (
+            ('can view sponsorship', 'view sponsorship application'),
+            ('can sponsor', 'sponsor')
+        )
     def __str__(self):
         return self.sponsorName
     
 class Applications(models.Model):
-    status_choices= {
+    status_choices = {
         ('Pending approval','Pending'),
         ('Approved','Approved'),
         ('Rejected','Rejected')
@@ -123,3 +133,5 @@ class Applications(models.Model):
 
     def __str__(self):
         return self.studentId
+
+user = get_user_model

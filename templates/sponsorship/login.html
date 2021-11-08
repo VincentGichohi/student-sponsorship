@@ -5,7 +5,7 @@
 <div class="login-wrap">
   <div class="container py-5">
     <h1>Login</h1>
-    <form id='login_form' class='form' method="POST" action="{% url 'login' %}">
+    <form id='login_form' class='form' method="POST" action="">
       {% csrf_token %}
       {{ login_form|crispy }}
       <a href="{% url 'dashboard' %}">

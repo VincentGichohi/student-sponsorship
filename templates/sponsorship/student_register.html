@@ -1,3 +1,4 @@
+
 {% extends 'basebase.html'%}
 
 {% block content %}
@@ -5,15 +6,18 @@
     <div class="login-wrap">
   <div class="container py-5">
     <div class="login-title">
-      <h1>Register as a Sponsor</h1>
+      <h1>Register as a Student</h1>
     </div>
-    <form method="POST" action="{% url 'login' %}">
+    <form method="POST" action="{% url 'student_register' %}">
       {% csrf_token %}
       {{ form|crispy }}      
       <a href="{% url 'login' %}">
-        <button class="btn btn-primary" type="submit">Register as a Sponsor</button>
+        <button class="btn btn-primary" type="submit">Register</button>
       </a>           
     </form>
+    {% for message in messages %}
+      <p>{{ messages }}</p>
+    {% endfor %}
     <p class="text-center">If you already have an account, <a href="/login">login</a> instead.</p>
   </div>
 </div>

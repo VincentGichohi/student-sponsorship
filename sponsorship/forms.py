@@ -6,16 +6,17 @@ from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
-from .models import User
+from .models import MyUser
 
+user = get_user_model
 
 class RegistrationForm(UserCreationForm):
     """
       Form for Registering new users 
     """
-    email = forms.EmailField(max_length=60, help_text = 'Required. Add a valid email address')
+    email = forms.EmailField(max_length=60, help_text='Required. Add a valid email address')
     class Meta:
-        model = User
+        model = MyUser
         fields = ('email', 'password1', 'password2')
 
     def __init__(self, *args, **kwargs):
@@ -36,7 +37,7 @@ class AccountAuthenticationForm(forms.ModelForm):
     password  = forms.CharField(label= 'Password', widget=forms.PasswordInput)
 
     class Meta:
-        model  =  User
+        model  =  MyUser
         fields =  ('email', 'password')
         widgets = {
                    'email':forms.TextInput(attrs={'class':'form-control'}),
@@ -63,7 +64,7 @@ class AccountUpdateform(forms.ModelForm):
       Updating User Info
     """
     class Meta:
-        model  = User
+        model  = MyUser
         fields = ('email',)
         widgets = {
                    'email':forms.TextInput(attrs={'class':'form-control'}),
@@ -82,15 +83,15 @@ class AccountUpdateform(forms.ModelForm):
         if self.is_valid():
             email = self.cleaned_data['email']
             try:
-                account = CustomUser.objects.exclude(pk = self.instance.pk).get(email=email)
-            except CustomUser.DoesNotExist:
+                account = MyUser.objects.exclude(pk = self.instance.pk).get(email=email)
+            except MyUser.DoesNotExist:
                 return email
             raise forms.ValidationError("Email '%s' already in use." %email)
 
 class CustomUserChangeForm(UserChangeForm):
 
     class Meta:
-        model = User
+        model = MyUser
         fields = ('email',)
 
 class ContactForm(forms.Form):
@@ -99,10 +100,11 @@ class ContactForm(forms.Form):
 	email_address = forms.EmailField(max_length = 150)
 	message = forms.CharField(widget = forms.Textarea, max_length = 2000)
 
+#a form for creating Students
 class StudentSignUpForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
-        model = User
+        model = MyUser
         fields= ('email', 'is_student')
 
     @transaction.atomic
@@ -112,8 +114,10 @@ class StudentSignUpForm(UserCreationForm):
         user.save()
         student=Student.objects.create(user=user)
         return user
+
+#a form for creating new Sponsors
 class SponsorSignUpForm(UserCreationForm):
-    model = User
+    model = MyUser
     fields = ('email', 'is_sponsor')
 
     @transaction.atomic
@@ -123,10 +127,12 @@ class SponsorSignUpForm(UserCreationForm):
         user.save()
         sponsor= Sponsor.objects.create(user=user)
         return user
+
+#a form for creating new Staffs
 class StaffSignUpForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
-        model = User
+        model = MyUser
         fields = ('email','is_staff')
 
     def save(self, commit = True):
@@ -171,23 +177,10 @@ class Success(forms.Form):
         return self.Email
 
 
-# class SchoolForm(ModelForm):
-#
-#     class Meta:
-#         model=Student
-#         fields=('school_name','school_address','academic_level','expected_year_of_completion')
-#
-#
-# class RecommendationForm(ModelForm):
-#
-#     class Meta:
-#         model=Student
-#         fields=('reasons_for_sponsorship','recommendation_letter')
-
-class SponsorForm(forms.Form):
+class SponsorForm(ModelForm):
 
     class Meta:
         model=Sponsor
         fields=(
-            'sponsorName','country_of_origin','sponsoredSchool','type_of_sponsorship'
+            'sponsorName','country','sponsoredSchool','type_of_sponsorship'
         )

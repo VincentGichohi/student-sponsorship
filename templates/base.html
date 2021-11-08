@@ -460,9 +460,10 @@ table th, td{
                         <span class="links_name">Dashboard</span>
                       </a>
                     </li>
-                    {% if request.user.is_authenticated %}
+                    {% if user.is_authenticated %}
+                     
                     <li>
-                      <a href="#">
+                      <a href="{% url 'home' %}">
                         <span class="icon"><i class="fas fa-home"></i></span>
                         <span class="title">Home</span>
                       </a>
@@ -470,7 +471,7 @@ table th, td{
                     <li>
                       <a href="{% url 'bio' %}">
                         <span class="icon"><i class="fas fa-user"></i></span>
-                        <span class="title">Profile</span>
+                        <span class="title">Upload documents</span>
                       </a>
                     </li>
                     <li>
@@ -487,69 +488,16 @@ table th, td{
                         </a>
                       </li>
                       <li>
-                        <a href="">
+                        <a href="{%url 'index' %}">
                           <span class="icon"><i class="fas fa-sign-out-alt"></i></span>
                           <span class="title">Logout</span>
                         </a>
                         {% endif %}
-                         <a href="">
+                         <!-- <a href="">
                           <span class="icon"><i class="fas fa-sign-out-alt"></i></span>
-                          <span class="title">Welcome, {{user.username}}</span>
-                        </a>
-                      </li>
+                          <span class="title">Welcome, {{user.email}}</span>
+                        </a> -->
                       
-                      <li>
-                        <a href="#">
-                          <span class="icon"><i class="fas fa-home"></i></span>
-                          <span class="title">Home</span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="{% url 'bio' %}">
-                          <span class="icon"><i class="fas fa-user"></i></span>
-                          <span class="title">Profile</span>
-                        </a>
-                      </li>
-                      <li>
-                        <li>
-                          <a href="#">
-                            <span class="icon"><i class="fas fa-pause-circle"></i></span>
-                            <span class="title">Pending Applications</span>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="">
-                            <span class="icon"><i class="fas fa-sign-out-alt"></i></span>
-                            <span class="title">Logout</span>
-                          </a>
-                        </li>
-                      
-                       
-                        <li>
-                          <a href="#">
-                            <span class="icon"><i class="fas fa-home"></i></span>
-                            <span class="title">Home</span>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="{% url 'bio' %}">
-                            <span class="icon"><i class="fas fa-user"></i></span>
-                            <span class="title">Profile</span>
-                          </a>
-                        </li>
-                        <li>
-                          <li>
-                            <a href="#">
-                              <span class="icon"><i class="fas fa-pause-circle"></i></span>
-                              <span class="title">Approved Applications</span>
-                            </a>
-                          </li>
-                          <li>
-                            <a href="{% url 'login' %}">
-                              <span class="icon"><i class="fas %fa-sign-out-alt"></i></span>
-                              <span class="title">Logout</span>
-                            </a>
-                          </li>
                           {% if not.user.is_authenticated %}
                           return redirect('index')
                         {% endif %}
@@ -557,6 +505,9 @@ table th, td{
         </div>
          <div class="col-9">
              {% block content %}
+           {% if user.is_authenticated %}
+               Welcome, {{user.email}}
+           {% endif %}
               {% include 'sponsorship/messages.html' %}
              {% endblock %}
          </div>

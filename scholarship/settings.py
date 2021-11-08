@@ -95,7 +95,7 @@ WSGI_APPLICATION = 'scholarship.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'scholarship',
+        'NAME': 'sponsorship',
         'PORT': '5432',
         'HOST': '',
         'USERNAME': 'postgres',
@@ -146,7 +146,7 @@ STATICFILES_DIRS = os.path.join(BASE_DIR, 'static/'),
 
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'dashboard'
-LOGIN_URL='login'
+LOGIN_URL = 'login'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -160,11 +160,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 1025
-EMAIL_HOST_USER='lassttonnee@gmail.com'
-EMAIL_USE_TLS=True
-EMAIL_USE_SSL=False
-EMAIL_HOST_PASSWORD='34178508'
+EMAIL_HOST_USER = 'lassttonnee@gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_HOST_PASSWORD = '34178508'
 
 RECIPIENT_ADDRESS ='RECIPIENT_ADDRESS'
 
-AUTH_USER_MODEL = 'sponsorship.User'
+AUTH_USER_MODEL = 'sponsorship.MyUser'

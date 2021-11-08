@@ -9,10 +9,12 @@
   {% if submitted %}
     Your Form was submitted Successfully!
   {% else %}
-    <form action="{ % url 'school' %}" method="post" enctype="multipart/form-data">
+    <form action="{% url 'bio' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form|crispy }}
-        <input type="submit" value="Submit" class="btn-btn-secondary">
+        <a href="{% url 'school' %}">
+            <input type="submit" value="Submit" class="btn-btn-secondary">
+        </a>
       </form>
   </center>
   {% endif %}
