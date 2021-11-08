@@ -34,7 +34,7 @@ class AccountAuthenticationForm(forms.ModelForm):
     """
       Form for Logging in  users
     """
-    password  = forms.CharField(label= 'Password', widget=forms.PasswordInput)
+    password  = forms.CharField(label='Password', widget=forms.PasswordInput)
 
     class Meta:
         model  =  MyUser
